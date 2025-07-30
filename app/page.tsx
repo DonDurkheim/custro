@@ -410,7 +410,7 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="text-4xl md:text-6xl font-bold font-display mb-6"
           >
-            <span className="gradient-text">7 days.</span> That’s all we need to show you it works.
+            <span className="gradient-text">Our Offer!</span>
           </motion.h2>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -420,7 +420,7 @@ const HomePage = () => {
             className="glass-card bg-gradient-to-r from-primary-400/5 to-blue-500/5"
           >
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              We only ask for 50% upfront. If you’re not blown away in your first week, walk away. But most don’t. Because the results speak louder than the setup.
+              Pay setup fee first. If you don’t double your qualified lead conversions in 30 days, we work for free until you do.
             </p>
           </motion.div>
         </div>
