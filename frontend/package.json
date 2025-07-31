@@ -23,7 +23,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.4.1",
-    "tailwind-merge": "^2.0.0"
+    "tailwind-merge": "^2.0.0",
+    "axios": "^1.11.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
