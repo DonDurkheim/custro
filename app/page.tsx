@@ -227,7 +227,7 @@ const HomePage = () => {
               Custro - Your Investment-Getting Partner.
               <br className="hidden md:block" />
               <span className="text-primary-400 font-semibold">Only serious investment opportunities reach you.</span>
-              No learning curves. Just results.
+               No learning curves. Just results.
             </motion.p>
 
             {/* CTA Button */}
