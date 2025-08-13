@@ -24,11 +24,11 @@ import {
 } from 'lucide-react'
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
-  const [isBookingSubmitted, setIsBookingSubmitted] = useState(false)
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -41,8 +41,6 @@ const HomePage = () => {
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    toast.loading('Booking your call...', { id: 'booking' });
-
     try {
       const response = await axios.post('https://custro-backend.onrender.com/leads', formData);
 
@@ -52,25 +50,22 @@ const HomePage = () => {
           const emailResponse = await axios.post('https://custro-backend.onrender.com/email', formData);
 
           if (emailResponse.status === 200) {
-            toast.success('Form submitted! Check your email for a call booking link.', {
-              id: 'booking',
-              duration: 5000,
-            });
-            setIsBookingSubmitted(true);
-            setFormData({ name: '', email: '', company: '', phone: '', message: '', product: '' });
+            router.push('/thank-you'); // Redirect to thank you page
           } else {
-            toast.error('Form submitted, but failed to send email.', { id: 'booking' });
+            console.error('Form submitted, but failed to send email.');
+            alert('Form submitted, but failed to send email.'); // Fallback alert
           }
         } catch (error: any) {
           console.error('Error sending email:', error);
-          toast.error('Form submitted, but failed to send email.', { id: 'booking' });
+          alert('Form submitted, but failed to send email.'); // Fallback alert
         }
       } else {
-        toast.error('Failed to submit form.', { id: 'booking' });
+        console.error('Failed to submit form.');
+        alert('Failed to submit form.'); // Fallback alert
       }
     } catch (error: any) {
       console.error('Error submitting form:', error);
-      toast.error('Failed to submit form.', { id: 'booking' });
+      alert('Failed to submit form.'); // Fallback alert
     }
   }
 
@@ -117,26 +112,26 @@ const HomePage = () => {
   const testimonials = [
     {
       name: 'Michael Wright',
-      role: 'Director of Sales',
-      content: 'Initially skeptical about another lead qualification tool, but Custro surprised us. Within 4 weeks, our SDRs were handling 40% fewer conversations but closing 55% more deals. The AI actually learns from our successful deals and refines its qualification criteria. Worth every penny.',
+      role: 'Director of Investments',
+      content: 'Initially skeptical about another deal sourcing tool, but Custro surprised us. Within 4 weeks, our analysts were handling 40% fewer pitches but closing 55% more deals. The AI actually learns from our successful investments and refines its qualification criteria. Worth every penny.',
       rating: 5,
-      company: 'Salesforce Partner',
+      company: 'Angel Investor Network',
       result: '2.8x ROI in 90 days'
     },
     {
       name: 'Emma Chen',
-      role: 'Marketing Director',
-      content: "We used to waste hours on tire-kickers who weren't ready to commit. Custro's qualification system identifies genuine decision-makers with actual budgets. Last quarter, we handled fewer leads but our average deal size went up by 40%. The implementation team was excellent too.",
+      role: 'Managing Partner',
+      content: "We used to waste hours on tire-kickers who weren't ready for investment. Custro's qualification system identifies genuine founders with actual potential. Last quarter, we handled fewer deals but our average investment size went up by 40%. The implementation team was excellent too.",
       rating: 5,
-      company: 'Enterprise SaaS',
+      company: 'Early-Stage VC',
       result: '40% larger deals'
     },
     {
       name: 'James Sullivan',
       role: 'Founder & CEO',
-      content: "As a B2B service provider, qualifying leads was our biggest challenge. Custro's AI doesn't just filter - it engages in meaningful conversations and schedules calls only with prospects who match our ideal customer profile. My sales team now spends time where it matters most.",
+      content: "As a private equity firm, qualifying deals was our biggest challenge. Custro's AI doesn't just filter - it engages in meaningful conversations and schedules calls only with prospects who match our ideal investment profile. My investment team now spends time where it matters most.",
       rating: 5,
-      company: 'Digital Agency',
+      company: 'Private Equity Firm',
       result: '67% less time prospecting'
     }
   ]
@@ -150,18 +145,6 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen">
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            background: 'rgba(15, 23, 42, 0.9)',
-            color: '#fff',
-            border: '1px solid rgba(250, 204, 21, 0.3)',
-            backdropFilter: 'blur(12px)',
-          },
-        }}
-      />
       <Navbar />
       
       {/* Hero Section */}
@@ -216,7 +199,7 @@ const HomePage = () => {
               className="inline-flex items-center space-x-3 glass-card mb-8 bg-gradient-to-r from-primary-400/10 to-blue-500/10"
             >
               <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse" />
-              <span className="text-sm font-medium">AI-Powered Lead Qualification</span>
+              <span className="text-sm font-medium">AI-Powered Deal Qualification</span>
               <Sparkles className="w-4 h-4 text-primary-400" />
             </motion.div>
 
@@ -229,9 +212,9 @@ const HomePage = () => {
             >
               Find Your Perfect
               <br />
-              <span className="gradient-text">Customers</span>
+              <span className="gradient-text">Investments</span>
               <br />
-              in Seconds  
+              in Seconds
             </motion.h1>
 
             {/* Subtitle */}
@@ -241,9 +224,9 @@ const HomePage = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
             >
-              We're not a tech company. We're your customer-getting partner. 
+              Custro - Your Investment-Getting Partner.
               <br className="hidden md:block" />
-              <span className="text-primary-400 font-semibold">Only serious buyers reach you.</span> 
+              <span className="text-primary-400 font-semibold">Only serious investment opportunities reach you.</span>
               No learning curves. Just results.
             </motion.p>
 
@@ -304,9 +287,9 @@ const HomePage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-6xl font-bold font-display mb-6">
-              <span className="gradient-text"> 3 Channels</span> to Qualify Every Lead
-            </h2>
+              <h2 className="text-4xl md:text-6xl font-bold font-display mb-6">
+                <span className="gradient-text">3 Channels</span> to Qualify Every Deal
+              </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               All three channels are designed to capture, qualify, and report — so you only spend time on real opportunities. The rest? It’s handled.
             </p>
@@ -330,12 +313,12 @@ const HomePage = () => {
               </div>
               <h3 className="text-2xl font-bold mb-4">1. Branded Form Page</h3>
               <p className="text-gray-400 leading-relaxed mb-4">
-                Your private page for qualified leads. We create a mobile-ready form at yourbusiness.custro.pro. Send traffic from ads, socials, or DMs. AI qualifies serious leads and notifies you instantly. Unqualified leads are logged for your review.
+                Your private page for qualified deals. We create a mobile-ready form at yourbusiness.custro.pro. Source deals from your network, incubators, or direct outreach. AI qualifies serious investment opportunities and notifies you instantly. Unqualified deals are logged for your review.
               </p>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 text-primary-400" />
-                  <span>Custom Questions</span>
+                  <span>Custom Investment Criteria</span>
                 </li>
                 <li className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 text-primary-400" />
@@ -343,7 +326,7 @@ const HomePage = () => {
                 </li>
                 <li className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 text-primary-400" />
-                  <span>Only Real Buyers Come Through</span>
+                  <span>Only Real Opportunities Come Through</span>
                 </li>
               </ul>
             </motion.div>
@@ -363,9 +346,9 @@ const HomePage = () => {
               <div className="w-16 h-16 bg-gradient-to-r from-purple-400/20 to-pink-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <MessageSquare className="w-8 h-8 text-purple-400" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">2. Smart Chatbot</h3>
+              <h3 className="text-2xl font-bold mb-4">2. Smart Dealbot</h3>
               <p className="text-gray-400 leading-relaxed mb-4">
-                Turn your site into a talking salesperson. Our copy-paste chatbot chats with visitors, answers questions, and collects buyer info 24/7. It filters and delivers only hot leads, working in the background while you stay in control.
+                Turn your site into a talking deal scout. Our copy-paste dealbot chats with founders, answers questions, and collects critical investment info 24/7. It filters and delivers only hot deals, working in the background while you stay in control.
               </p>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li className="flex items-center space-x-2">
@@ -398,9 +381,9 @@ const HomePage = () => {
               <div className="w-16 h-16 bg-gradient-to-r from-blue-400/20 to-cyan-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <Phone className="w-8 h-8 text-blue-400" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">3. Inbound Call Agent</h3>
+              <h3 className="text-2xl font-bold mb-4">3. Inbound Deal Agent</h3>
               <p className="text-gray-400 leading-relaxed mb-4">
-                Get your own smart phone number with a talking AI assistant. It handles inbound calls, understands intent, collects info, and checks fit. Qualified calls generate real-time reports. Unqualified calls are logged for your team's decision.
+                Get your own smart phone number with a talking AI assistant. It handles inbound calls from founders, understands their intent, collects info, and checks fit against your investment thesis. Qualified calls generate real-time reports. Unqualified calls are logged for your team's decision.
               </p>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li className="flex items-center space-x-2">
@@ -442,7 +425,7 @@ const HomePage = () => {
             className="glass-card bg-gradient-to-r from-primary-400/5 to-blue-500/5"
           >
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Pay setup fee first. If you don’t double your qualified lead conversions in 30 days, we work for free until you do.
+              Pay setup fee first. If you don’t double your qualified deal conversions in 30 days, we work for free until you do.
             </p>
           </motion.div>
         </div>
@@ -459,10 +442,10 @@ const HomePage = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-6xl font-bold font-display mb-6">
-              Trusted by <span className="gradient-text">Growth Leaders</span>
+              Trusted by <span className="gradient-text">Growth Investors</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Join successful businesses that chose results over empty promises
+              Join successful investors that chose results over empty pitches
             </p>
           </motion.div>
 
@@ -512,10 +495,10 @@ const HomePage = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-6xl font-bold font-display mb-6">
-              Ready to <span className="gradient-text">Scale</span>?
+              Ready to <span className="gradient-text">Scale Your Portfolio</span>?
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Book a growth call with our team. We'll show you exactly how to turn your traffic into qualified buyers.
+              Book a growth call with our team. We'll show you exactly how to turn your deal flow into qualified investments.
             </p>
           </motion.div>
 
@@ -533,18 +516,7 @@ const HomePage = () => {
                 <span>Get a Free Demo</span>
               </h3>
               
-              {isBookingSubmitted ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-8"
-                >
-                  <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-                  <h4 className="text-xl font-bold text-green-400 mb-2">Form Submitted Successfully!</h4>
-                  <p className="text-gray-300">Check your email for a call booking link.</p>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleBookingSubmit} className="space-y-6">
+              <form onSubmit={handleBookingSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
@@ -599,14 +571,14 @@ const HomePage = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">What do you sell?</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">What kind of investments are you looking for?</label>
                     <textarea
                       name="product"
                       value={formData.product}
                       onChange={handleInputChange}
                       rows={4}
                       className="w-full px-4 py-3 glass rounded-lg border border-white/10 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 bg-transparent text-white placeholder-gray-400 resize-none"
-                      placeholder="Tell us about your business and what you're looking to achieve..."
+                      placeholder="Tell us about your investment thesis and what you're looking for..."
                       required
                     />
                   </div>
@@ -626,7 +598,6 @@ const HomePage = () => {
                     * We'll send you a calendar link to choose your preferred time
                   </p>
                 </form>
-              )}
             </motion.div>
 
             {/* Call Benefits */}
@@ -653,11 +624,10 @@ const HomePage = () => {
             className="glass-card bg-gradient-to-r from-primary-400/5 to-blue-500/5"
           >
             <h2 className="text-4xl md:text-5xl font-bold font-display mb-6">
-              Every Business Deserves <span className="gradient-text">Big Growth</span>
+              Every Investor Deserves <span className="gradient-text">Smart Growth</span>
             </h2>
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Stop wasting time on empty clicks. Start talking to people who actually want to buy. 
-              Whether you sell shoes, solar panels, or sugarcane — Custro sends only real, serious buyers your way.
+              Stop wasting time on empty pitches. Start talking to founders who actually fit your thesis. Whether you invest in startups, real estate, or established businesses — Custro sends only real, serious investment opportunities your way.
             </p>
             
             <motion.a
